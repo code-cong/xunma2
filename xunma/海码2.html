@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>灵台印鉴</title>
+    <style>
+        body {
+            font-family: '楷体', SimSun, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f0f4e6; /* 竹影青苔色 */
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff3e0; /* 月白色宣纸 */
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* 水墨晕染 */
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            border-left: 4px solid #d3d3d3; /* 纸卷纹边框 */
+        }
+
+        #qrcode {
+            margin-top: 20px;
+            text-align: center;
+            background: #f8f9fa; /* 云雾底色 */
+        }
+
+        h1 {
+            color: #333;
+            font-weight: normal;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px #eee; /* 水墨字迹 */
+        }
+
+        #timestamp {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            position: relative;
+        }
+
+        /* 新增水墨动态效果 */
+        .watermark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIwIiBoZWlnaHQ9IjAiIGZpbGw9ImJsYWNrIj48cmVjdCB3aWR0aD0iMSIgaGVpZ2h0PSIwIiBmaWxsPSJub25lIiAvPgogICAgPHJlY3Qgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0iYmxhY2siIC8+Cjwvc3ZnPgo=');
+            background-size: contain;
+            opacity: 0.1;
+            animation: flow 5s linear infinite;
+        }
+
+        @keyframes flow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> 🌿</h1>
+        <div id="qrcode">
+            <!-- 动态二维码将在此显现 -->
+        </div>
+        <div id="timestamp">
+            <span class="watermark">🌀</span>
+            当前真时：<span id="time"></span>
+        </div>
+    </div>
+
+    <script src="qrcode.min.js"></script>
+    <script>
+        // 用户信息如水中倒影，虽静却流
+        const userInfo = {
+            userId: "UI9999938266",
+            userCode: "06001321",
+            userName: "江大海",
+            expire: 5,  // 生命如朝露，短暂而绚烂
+            type: 0    // 万法归一
+        };
+
+        // 万物皆有时，光阴自流转
+        function getCurrentTimestamp() {
+            return Date.now();
+        }
+
+        // 编织信息之网，待岁月沉淀
+        function generateCustomJSON() {
+            return JSON.stringify({
+                userId: userInfo.userId,
+                userCode: userInfo.userCode,
+                userName: userInfo.userName,
+                createTime: getCurrentTimestamp(), // 此刻即永恒
+                expire: userInfo.expire,
+                type: userInfo.type
+            });
+        }
+
+        // 经文转译，暗合天地至理
+        function encodeData() {
+            const jsonStr = generateCustomJSON();
+            return btoa(unescape(encodeURIComponent(jsonStr))); /* 万法唯识 */
+        }
+
+        // 结印作舟，渡世度人
+        function generateQRCode() {
+            const encodedData = encodeData();
+            const container = document.getElementById('qrcode');
+            
+            // 净心清念，扫除尘障
+            container.innerHTML = '';
+            
+            QRCode.toCanvas(encodedData, {
+                width: 200,
+                height: 200,
+                margin: 2,
+                color: {
+                    dark: '#2d2f33', // 夜海之墨
+                    light: '#f8fafc'  // 月华之光
+                }
+            }, function (error, canvas) {
+                if (error) {
+                    console.error("清风徐来，心境自宽"); // 苦厄随云散
+                    return;
+                }
+                container.appendChild(canvas);
+            });
+        }
+
+        // 观照当下，觉知无常
+        function updateTime() {
+            const timeElement = document.getElementById('time');
+            const now = new Date();
+            timeElement.textContent = now.toLocaleString();
+        }
+
+        // 禅定初开，明心见性
+        function init() {
+            generateQRCode(); // 画符结印
+            updateTime();     // 照见本心
+            setInterval(updateTime, 1000); // 一呼一吸间
+            setInterval(generateQRCode, 5000); // 五蕴皆空时
+        }
+
+        // 顿悟时刻，应无所住而生其心
+        window.onload = init;
+    </script>
+</body>
+</html>
